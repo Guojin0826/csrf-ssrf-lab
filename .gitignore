@@ -1,0 +1,151 @@
+# Git忽略文件配置
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE和编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.buildpath
+
+# PHP相关
+composer.phar
+composer.lock
+vendor/
+.phpunit.result.cache
+
+# 日志文件
+*.log
+logs/
+error_log
+access_log
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+*.cache
+tmp/
+temp/
+
+# 备份文件
+*_backup.php
+*_old.php
+*.backup
+README_OLD.md
+
+# 数据文件（包含用户敏感信息）
+csrf/data/users.json
+csrf/forum/data/forum_users.json
+csrf/bank/data/bank_users.json
+
+# Session文件
+sess_*
+sessions/
+
+# 配置文件中的敏感信息
+# 注意：保留演示用的配置文件，但忽略实际生产配置
+config.production.php
+.env
+.env.local
+.env.production
+
+# 上传文件目录
+uploads/
+files/
+
+# 编译和构建文件
+dist/
+build/
+node_modules/
+
+# 测试覆盖率报告
+coverage/
+.coverage
+htmlcov/
+
+# PHPStorm
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Notepad++
+*.npp
+
+# 其他编辑器
+*.code-workspace
+.history/
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# 文档备份
+*.md.bak
+*.md.old
+FEATURES.md.bak
+GUIDE.md.bak
+COMPARISON.md.bak
+START.md.bak
+QUICK_START.md.bak
+RESET_GUIDE.md.bak
+BUG_FIX.md.bak
+SSRF_UPDATE.md.bak
+
+# 隐藏文件夹
+.feisuan/
+.feisuan/*
+
+# 测试文件
+test/
+tests/
+*.test.php
+*_test.php
+
+# 调试文件
+debug/
+*.debug.php
+debug.log
+
+# 安全相关 - 不上传真实密码和密钥
+private/
+secrets/
+keys/
+*.key
+*.pem
+*.cert
+
+# 数据库文件（如果有）
+*.sql
+*.sqlite
+*.db
+
+# 缓存目录
+cache/
+cached/
+
+# 依赖目录
+bower_components/
+node_modules/
+
+# 运行时文件
+runtime/
+run/
+
+# 其他敏感文件
+credentials.json
+passwords.txt
+api_keys.txt
+secrets.txt

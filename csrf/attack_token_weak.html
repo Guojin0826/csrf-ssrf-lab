@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>攻击成功 - 弱Token被预测</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 600px;
+            width: 100%;
+        }
+        .header {
+            background: linear-gradient(135deg, #f56c6c 0%, #fa709a 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header .icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            opacity: 0.95;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 30px;
+        }
+        .danger-box {
+            background: #fef0f0;
+            border: 2px solid #f56c6c;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .danger-box h3 {
+            color: #f56c6c;
+            margin-bottom: 15px;
+        }
+        .danger-box p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .danger-box ul {
+            margin-left: 20px;
+            color: #666;
+        }
+        .danger-box li {
+            margin: 8px 0;
+        }
+        .code-section {
+            background: #2d2d2d;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .code-header {
+            background: #2d2d2d;
+            padding: 12px 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #3d3d3d;
+        }
+        .code-header h3 {
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .code-header button {
+            background: #f56c6c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+        .code-body {
+            padding: 15px;
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            display: none;
+        }
+        .code-body.show {
+            display: block;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #f56c6c 0%, #fa709a 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(245,108,108,0.4);
+        }
+        .nav-bar {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-bar a {
+            color: #666;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        .nav-bar a:hover {
+            background: #f56c6c;
+            color: white;
+        }
+        .attack-success {
+            background: #d4edda;
+            border: 2px solid #67c23a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .attack-success h4 {
+            color: #67c23a;
+            margin-bottom: 10px;
+        }
+        .attack-success p {
+            color: #155724;
+            font-size: 0.9em;
+        }
+        .token-predict {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .token-predict h4 {
+            color: #fa709a;
+            margin-bottom: 10px;
+        }
+        .token-predict p {
+            color: #666;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+        .token-value {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <span style="color: #f56c6c; font-weight: 600;">🔥 CSRF攻击演示</span>
+            <a href="../index.php">🏠 返回主页</a>
+        </div>
+        
+        <div class="header">
+            <div class="icon">⚠️</div>
+            <h1>攻击成功！</h1>
+            <p>弱Token被成功预测，防护失效</p>
+        </div>
+        
+        <div class="content">
+            <div class="danger-box">
+                <h3>⚠️ 弱Token防护失效</h3>
+                <p>攻击成功执行，原因如下：</p>
+                <ul>
+                    <li>Token基于时间戳生成，可预测</li>
+                    <li>攻击者使用相同算法生成Token</li>
+                    <li>Token长度太短（8位），容易猜测</li>
+                    <li>用户信息已被修改为攻击者指定值</li>
+                </ul>
+            </div>
+            
+            <div class="attack-success">
+                <h4>✅ 攻击执行成功</h4>
+                <p><strong>攻击目标：</strong>修改用户昵称为"被攻击的用户"</p>
+                <p><strong>攻击方式：</strong>预测弱Token进行CSRF攻击</p>
+                <p><strong>攻击结果：</strong>成功 - Token验证通过</p>
+                <p><strong>防护机制：</strong>弱Token验证（可预测）</p>
+            </div>
+            
+            <div class="token-predict">
+                <h4>🔍 Token预测过程</h4>
+                <p><strong>1. 攻击者获取当前时间戳：</strong></p>
+                <div class="token-value">$current_time = time(); // <?php echo time(); ?></div>
+                <p style="margin-top: 15px;"><strong>2. 使用相同算法生成Token：</strong></p>
+                <div class="token-value">$predicted_token = substr(md5(time()), 0, 8); // <?php echo substr(md5(time()), 0, 8); ?></div>
+                <p style="margin-top: 15px;"><strong>3. 构造攻击表单并提交：</strong></p>
+                <p style="color: #f56c6c;">攻击成功！Token匹配，服务器执行操作。</p>
+            </div>
+            
+            <div class="code-section">
+                <div class="code-header">
+                    <h3>💻 攻击代码详解</h3>
+                    <button onclick="toggleCode()">显示/隐藏</button>
+                </div>
+                <div class="code-body" id="codeBody">
+                    <strong style="color: #f56c6c;">// 弱Token生成代码（服务器端）</strong><br>
+                    // 基于时间戳生成Token<br>
+                    $token = substr(md5(time()), 0, 8);<br><br>
+                    <strong style="color: #fa709a;">// 攻击代码（攻击者）</strong><br>
+                    // 1. 获取当前时间戳（与服务器相同）<br>
+                    $current_time = time();<br><br>
+                    // 2. 使用相同算法生成Token<br>
+                    $predicted_token = substr(md5($current_time), 0, 8);<br><br>
+                    // 3. 构造攻击表单<br>
+                    &lt;form action="csrf_token_weak.php" method="POST"&gt;<br>
+                    &nbsp;&nbsp;&lt;input type="hidden" name="action" value="update_weak"&gt;<br>
+                    &nbsp;&nbsp;&lt;input type="hidden" name="csrf_token" value="&lt;?php echo $predicted_token; ?&gt;"&gt;<br>
+                    &nbsp;&nbsp;&lt;input type="hidden" name="nickname" value="被攻击的用户"&gt;<br>
+                    &lt;/form&gt;<br><br>
+                    <strong style="color: #f56c6c;">// 为什么攻击成功？</strong><br>
+                    1. Token基于时间戳生成，攻击者可预测<br>
+                    2. 攻击者知道生成算法（md5 + substr）<br>
+                    3. 攻击者与服务器时间基本同步<br>
+                    4. 生成的Token与服务器Token匹配
+                </div>
+            </div>
+            
+            <div style="background: #fdf6ec; border: 1px solid #e6a23c; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                <h4 style="color: #e6a23c; margin-bottom: 10px;">💡 安全建议</h4>
+                <p style="color: #666; font-size: 0.9em; line-height: 1.6;">
+                    不要使用可预测的值生成Token（如时间戳、用户ID等）。应该使用加密安全的随机数生成器，
+                    如 <code>random_bytes()</code> 或 <code>openssl_random_pseudo_bytes()</code>，
+                    生成足够长度（至少32字节）的不可预测Token。
+                </p>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                <button onclick="executeAttack()" class="btn" style="flex: 1;">
+                    🔥 执行攻击演示
+                </button>
+                <a href="csrf_token_weak.php" class="btn" style="flex: 1; background: linear-gradient(135deg, #409eff 0%, #66b1ff 100%);">
+                    📋 返回演示页面
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CSRF攻击代码 - 使用预测的Token -->
+    <form id="attackForm" action="csrf_token_weak.php" method="POST" style="display:none">
+        <input type="hidden" name="action" value="update_weak">
+        <!-- ✅ 使用预测的Token，攻击会成功 -->
+        <input type="hidden" name="csrf_token" value="<?php echo substr(md5(time()), 0, 8); ?>">
+        <input type="hidden" name="nickname" value="被攻击的用户">
+    </form>
+    
+    <script>
+        function toggleCode() {
+            const codeBody = document.getElementById('codeBody');
+            codeBody.classList.toggle('show');
+        }
+        
+        function executeAttack() {
+            if (confirm('确定要执行攻击演示吗？\n\n攻击将修改您的用户信息，您可以返回演示页面查看结果。')) {
+                document.getElementById('attackForm').submit();
+            }
+        }
+    </script>
+</body>
+</html>

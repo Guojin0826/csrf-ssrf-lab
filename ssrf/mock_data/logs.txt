@@ -1,0 +1,20 @@
+2024-01-01 10:00:00 [INFO] System startup completed
+2024-01-01 10:05:00 [ERROR] Database connection failed: Connection refused
+2024-01-01 10:10:00 [WARNING] High CPU usage detected: 85%
+2024-01-01 10:15:00 [INFO] User admin logged in from 192.168.1.50
+2024-01-01 10:20:00 [ERROR] Authentication failed for user: guest
+2024-01-01 10:25:00 [INFO] API request: /api/users from 10.0.1.100
+2024-01-01 10:30:00 [WARNING] Suspicious activity detected: Multiple failed login attempts
+2024-01-01 10:35:00 [ERROR] Payment gateway error: Invalid API key
+2024-01-01 10:40:00 [INFO] Backup completed successfully
+2024-01-01 10:45:00 [DEBUG] SQL Query: SELECT * FROM users WHERE role='admin'
+2024-01-01 10:50:00 [ERROR] Redis connection timeout
+2024-01-01 10:55:00 [INFO] New user registered: test@example.com
+2024-01-01 11:00:00 [WARNING] Disk space low: 15% remaining
+2024-01-01 11:05:00 [ERROR] SSL certificate expired
+2024-01-01 11:10:00 [INFO] Scheduled maintenance started
+2024-01-01 11:15:00 [DEBUG] Cache cleared for key: user_sessions
+2024-01-01 11:20:00 [ERROR] File upload failed: Permission denied
+2024-01-01 11:25:00 [INFO] Email sent to: admin@internal.com
+2024-01-01 11:30:00 [WARNING] Memory usage high: 90%
+2024-01-01 11:35:00 [INFO] System health check passed

