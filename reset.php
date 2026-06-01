@@ -3,6 +3,12 @@
  * 初始化/重置演示环境
  * 将所有数据恢复到初始状态
  */
+
+// 开启错误报告
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+
 session_start();
 
 // 清除所有session数据
@@ -51,7 +57,7 @@ $forumDataDir = dirname($forumDataFile);
 
 // 确保数据目录存在
 if (!is_dir($forumDataDir)) {
-    mkdir($forumDataDir, 0755, true);
+    mkdir($forumDataDir, 0777, true);
 }
 
 $forumUsers = [
@@ -77,7 +83,18 @@ $forumUsers = [
         'level' => '资深会员'
     ]
 ];
-file_put_contents($forumDataFile, json_encode($forumUsers, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+// 写入论坛用户数据
+if (file_put_contents($forumDataFile, json_encode($forumUsers, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) === false) {
+    // 写入失败，返回错误
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => '论坛用户数据写入失败',
+        'error' => '无法写入文件: ' . $forumDataFile
+    ]);
+    exit;
+}
 
 // 重置原有CSRF演示用户数据
 $_SESSION['users'] = [
@@ -90,6 +107,13 @@ $_SESSION['users'] = [
 
 // 重置原有CSRF演示用户数据（config.php使用的文件）
 $csrfDataFile = __DIR__ . '/csrf/data/users.json';
+$csrfDataDir = dirname($csrfDataFile);
+
+// 确保目录存在
+if (!is_dir($csrfDataDir)) {
+    mkdir($csrfDataDir, 0777, true);
+}
+
 $csrfUsers = [
     'admin' => [
         'password' => 'admin123',
@@ -105,12 +129,17 @@ $csrfUsers = [
     ]
 ];
 
-// 确保目录存在
-if (!is_dir(dirname($csrfDataFile))) {
-    mkdir(dirname($csrfDataFile), 0777, true);
+// 写入CSRF用户数据
+if (file_put_contents($csrfDataFile, json_encode($csrfUsers, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) === false) {
+    // 写入失败，返回错误
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => 'CSRF用户数据写入失败',
+        'error' => '无法写入文件: ' . $csrfDataFile
+    ]);
+    exit;
 }
-
-file_put_contents($csrfDataFile, json_encode($csrfUsers, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
 // 返回成功信息
 header('Content-Type: application/json');
