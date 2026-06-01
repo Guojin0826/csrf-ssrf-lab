@@ -209,6 +209,55 @@ $current_user = $is_logged_in ? $_SESSION['user'] : null;
         </div>
 
         <div class="modules">
+            <!-- CSRF 入门教学 -->
+            <div class="module-card">
+                <div class="module-header csrf-header">
+                    <h2>🎓 CSRF - 入门教学</h2>
+                    <p>跨站请求伪造基础演示</p>
+                </div>
+                <div class="module-content">
+                    <h3>漏洞说明</h3>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        CSRF攻击者诱导用户在已登录的网站上执行非预期操作，如修改个人信息等。
+                    </p>
+                    <h3>演示场景</h3>
+                    <ul>
+                        <li>用户登录系统</li>
+                        <li>漏洞版本：无CSRF Token保护</li>
+                        <li>安全版本：有CSRF Token保护</li>
+                        <li>攻击演示：对比攻击效果</li>
+                    </ul>
+                    <div class="btn-group">
+                        <a href="csrf/login.php" class="btn btn-danger">开始演示</a>
+                        <a href="csrf/attack.html" class="btn btn-primary">攻击演示</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SSRF 入门教学 -->
+            <div class="module-card">
+                <div class="module-header ssrf-header">
+                    <h2>🎓 SSRF - 入门教学</h2>
+                    <p>服务端请求伪造基础演示</p>
+                </div>
+                <div class="module-content">
+                    <h3>漏洞说明</h3>
+                    <p style="color: #666; margin-bottom: 15px;">
+                        SSRF攻击者利用服务器发起请求，访问内部资源或外部系统，可能导致敏感信息泄露。
+                    </p>
+                    <h3>演示场景</h3>
+                    <ul>
+                        <li>URL图片获取功能</li>
+                        <li>访问内网资源</li>
+                        <li>读取本地文件</li>
+                        <li>端口扫描探测</li>
+                    </ul>
+                    <div class="btn-group">
+                        <a href="ssrf/index.php" class="btn btn-info">进入演示</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- CSRF 银行转账场景 -->
             <div class="module-card">
                 <div class="module-header csrf-header">
@@ -259,31 +308,6 @@ $current_user = $is_logged_in ? $_SESSION['user'] : null;
                 </div>
             </div>
 
-            <!-- CSRF 原有演示 -->
-            <div class="module-card">
-                <div class="module-header csrf-header">
-                    <h2>🛡️ CSRF - 基础演示</h2>
-                    <p>跨站请求伪造基础演示</p>
-                </div>
-                <div class="module-content">
-                    <h3>漏洞说明</h3>
-                    <p style="color: #666; margin-bottom: 15px;">
-                        CSRF攻击者诱导用户在已登录的网站上执行非预期操作，如修改个人信息等。
-                    </p>
-                    <h3>演示场景</h3>
-                    <ul>
-                        <li>用户登录系统</li>
-                        <li>漏洞版本：无CSRF Token保护</li>
-                        <li>安全版本：有CSRF Token保护</li>
-                        <li>攻击演示：对比攻击效果</li>
-                    </ul>
-                    <div class="btn-group">
-                        <a href="csrf/login.php" class="btn btn-danger">开始演示</a>
-                        <a href="csrf/attack.html" class="btn btn-primary">攻击演示</a>
-                    </div>
-                </div>
-            </div>
-
             <!-- SSRF 拟真场景 -->
             <div class="module-card">
                 <div class="module-header ssrf-header">
@@ -304,30 +328,6 @@ $current_user = $is_logged_in ? $_SESSION['user'] : null;
                     </ul>
                     <div class="btn-group">
                         <a href="ssrf/demo.php" class="btn btn-info">进入演示</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SSRF 基础演示 -->
-            <div class="module-card">
-                <div class="module-header ssrf-header">
-                    <h2>🌐 SSRF - 基础演示</h2>
-                    <p>服务端请求伪造基础演示</p>
-                </div>
-                <div class="module-content">
-                    <h3>漏洞说明</h3>
-                    <p style="color: #666; margin-bottom: 15px;">
-                        SSRF攻击者利用服务器发起请求，访问内部资源或外部系统，可能导致敏感信息泄露。
-                    </p>
-                    <h3>演示场景</h3>
-                    <ul>
-                        <li>URL图片获取功能</li>
-                        <li>访问内网资源</li>
-                        <li>读取本地文件</li>
-                        <li>端口扫描探测</li>
-                    </ul>
-                    <div class="btn-group">
-                        <a href="ssrf/index.php" class="btn btn-info">进入演示</a>
                     </div>
                 </div>
             </div>

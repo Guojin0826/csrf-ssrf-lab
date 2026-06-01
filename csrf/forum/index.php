@@ -6,6 +6,13 @@ session_start();
 
 // 初始化论坛用户数据
 $dataFile = __DIR__ . '/data/forum_users.json';
+$dataDir = dirname($dataFile);
+
+// 确保数据目录存在
+if (!is_dir($dataDir)) {
+    mkdir($dataDir, 0755, true);
+}
+
 if (!file_exists($dataFile)) {
     $defaultUsers = [
         'admin' => [

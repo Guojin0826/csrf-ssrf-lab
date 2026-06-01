@@ -47,6 +47,13 @@ $_SESSION['bank_users'] = [
 
 // 重置论坛用户数据
 $forumDataFile = __DIR__ . '/csrf/forum/data/forum_users.json';
+$forumDataDir = dirname($forumDataFile);
+
+// 确保数据目录存在
+if (!is_dir($forumDataDir)) {
+    mkdir($forumDataDir, 0755, true);
+}
+
 $forumUsers = [
     'admin' => [
         'password' => 'admin123',
